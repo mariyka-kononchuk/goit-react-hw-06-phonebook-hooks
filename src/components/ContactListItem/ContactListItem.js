@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/contacts/contacts-action'
 import s from './ContactListItem.module.css';
 
-const ContactListItem = ({ contacts, onDeleteContact }) => (
+const ContactListItem = ({contacts, onDeleteContact }) => (
     <div className={s.item}>
         <p className={s.contact}>
             <span className={s.name}>{contacts.name}:
@@ -14,6 +16,14 @@ const ContactListItem = ({ contacts, onDeleteContact }) => (
     </div> 
 )
 
+const mapDispatchToProps = dispatch => {
+  return {
+    onDeleteContact: (contactId) => dispatch(actions.deleteContact(contactId)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(ContactListItem);
+
 ContactListItem.propTypes = {
   contacts: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -22,5 +32,3 @@ ContactListItem.propTypes = {
   }),
     onDeleteContact:PropTypes.func.isRequired
 };
-
-export default ContactListItem;
