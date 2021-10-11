@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import s from './ContactList.module.css';
 import ContactListItem from '../ContactListItem';
 
-const ContactList = ({contacts}) => (
-    <ul className={s.list}>
-        {contacts.map((contacts)=> (
-            <li key={contacts.id}  >
-                <ContactListItem contacts={contacts}/>
-            </li>
-        ))}
-    </ul>
-)
+export default function ContactList  () {
+const contacts = useSelector(({contacts:{items, filter}}) => getVisibleContacts(items, filter))
+    return (
+        <ul className={s.list}>
+            {contacts.map((contacts) => (
+                <li key={contacts.id}  >
+                    <ContactListItem contacts={contacts} />
+                </li>
+            ))}
+        </ul>
+    )
+}
 
  const getVisibleContacts = (allContacts, filter) => {
     const normilizedFilter = filter.toLowerCase();
@@ -20,18 +23,18 @@ const ContactList = ({contacts}) => (
       contact.name.toLowerCase().includes(normilizedFilter));
   }
 
-const mapStateToProps = ({contacts:{items, filter}}) => {
-    return {
-        contacts: getVisibleContacts(items, filter)
-    }
-  }
+// const mapStateToProps = ({contacts:{items, filter}}) => {
+//     return {
+//         contacts: getVisibleContacts(items, filter)
+//     }
+//   }
 
-export default connect(mapStateToProps, null)(ContactList);
+
 
 ContactList.propTypes = {
     contacts: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.string.isRequired,
+            id: PropTypes.string,
         })
     ),
 };
